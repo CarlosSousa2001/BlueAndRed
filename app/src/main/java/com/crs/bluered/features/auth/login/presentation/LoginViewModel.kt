@@ -67,11 +67,13 @@ class LoginViewModel @Inject constructor(
         }
     }
 
+    // Chama o use case de validação (tipo um "schema")
     private fun submit() {
 
         val emailValue = _uiState.value.email.value
         val passwordValue = _uiState.value.password.value
 
+        // Centralizo as regras de validação no use case,
         val errors = validateLoginInputUseCase(emailValue, passwordValue)
 
         if (errors.isNotEmpty()) {
@@ -140,6 +142,7 @@ class LoginViewModel @Inject constructor(
         }
     }
 
+    // Aplica o resultado do "schema" de validação no uiState,
     private fun applyErrors(errors: FieldErrors) {
         _uiState.update { state ->
             state.copy(

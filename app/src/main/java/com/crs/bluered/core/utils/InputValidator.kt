@@ -2,6 +2,8 @@ package com.crs.bluered.core.utils
 
 import android.util.Patterns
 
+// Helpers centralizados para validação de inputs.
+// Estou usando esse padrão como alternativa a um "schema" de validação,
 object InputValidator {
 
     fun validateEmail(email: String): String? {

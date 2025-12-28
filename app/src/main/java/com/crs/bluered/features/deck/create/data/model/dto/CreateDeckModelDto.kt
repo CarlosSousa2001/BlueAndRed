@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 data class CreateDeckModelDto(
     val title: String,
     val visibility: String,
-    val maxMembers: Int
+    val maxMembers: Int?
 )

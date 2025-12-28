@@ -3,7 +3,6 @@ package com.crs.bluered.features.auth.login.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.crs.bluered.core.domain.exceptions.LoginException
-import com.crs.bluered.core.utils.logging.logInfo
 import com.crs.bluered.core.utils.validation.FieldErrors
 import com.crs.bluered.features.auth.login.domain.model.AuthRequestModel
 import com.crs.bluered.features.auth.login.domain.usecase.LoginUseCase
@@ -67,13 +66,11 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    // Chama o use case de validação (tipo um "schema")
     private fun submit() {
 
         val emailValue = _uiState.value.email.value
         val passwordValue = _uiState.value.password.value
 
-        // Centralizo as regras de validação no use case,
         val errors = validateLoginInputUseCase(emailValue, passwordValue)
 
         if (errors.isNotEmpty()) {
@@ -91,8 +88,6 @@ class LoginViewModel @Inject constructor(
                         password = passwordValue
                     )
                 )
-
-                logInfo("HTTP_RESPONSE", response.toString())
 
                 val token = response.token
                 val username = response.username

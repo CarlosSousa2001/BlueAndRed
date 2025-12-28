@@ -7,13 +7,14 @@ import com.crs.bluered.features.deck.create.domain.repository.CreateDeckReposito
 import com.crs.bluered.shared.domain.entities.DeckResponseEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
 
 interface CreateDeckUseCase {
     operator fun invoke(parameters: Parameters): Flow<ResponseData<DeckResponseEntity>>
     data class Parameters(val input: CreateDeckModel)
 }
 
-class CreateDeckUseCaseImpl constructor(
+class CreateDeckUseCaseImpl @Inject constructor(
     private val repository: CreateDeckRepository
 ) : CreateDeckUseCase {
     override fun invoke(parameters: CreateDeckUseCase.Parameters): Flow<ResponseData<DeckResponseEntity>> {

@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">blueRed</string>
+
+    <string name="am_error_occurred_text">Um erro ocorreu</string>
+    <string name="try_again_text">Tente novamente</string>
+    <string name="empty_recipe_text">Nenhuma receita</string>
+    <string name="no_connections_text">Voce ainda não possui conexões</string>
 </resources>

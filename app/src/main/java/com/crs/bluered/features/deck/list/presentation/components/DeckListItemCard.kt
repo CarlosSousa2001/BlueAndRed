@@ -23,7 +23,7 @@ import com.crs.bluered.features.deck.list.domain.model.DeckListItem
 import com.crs.bluered.ui.theme.PureWhite
 import com.crs.bluered.ui.theme.SuccessLight
 import com.crs.bluered.ui.theme.WarningLight
-
+import com.crs.bluered.ui.theme.BlueRedThemeSizing.sizing
 @Composable
 fun DeckListItemCard(
     item: DeckListItem,
@@ -62,14 +62,14 @@ fun DeckListItemCard(
             .height(192.dp) // 🔹 controla a “verticalidade” do card
             .background(
                 color = containerColor,
-                shape = RoundedCornerShape(16.dp)
+                shape = RoundedCornerShape(sizing.md)
             )
             .border(
                 width = 1.dp,
                 color = cs.outline,
-                shape = RoundedCornerShape(18.dp)
+                shape = RoundedCornerShape(sizing.md)
             )
-            .padding(16.dp)
+            .padding(sizing.md)
     ) {
 
         // 🔹 Título no topo
@@ -86,7 +86,7 @@ fun DeckListItemCard(
 
         // 🔹 Contadores no rodapé do card
         Row(
-            horizontalArrangement = Arrangement.spacedBy(20.dp),
+            horizontalArrangement = Arrangement.spacedBy(sizing.m2d),
             verticalAlignment = Alignment.CenterVertically
         ) {
             DeckCounter(

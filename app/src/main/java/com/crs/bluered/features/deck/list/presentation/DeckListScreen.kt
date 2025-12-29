@@ -5,6 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.crs.bluered.core.domain.model.PaginationMeta
 import com.crs.bluered.features.deck.list.domain.model.DeckListItem
+import com.crs.bluered.features.deck.list.presentation.components.DeckListContainer
 import com.crs.bluered.shared.domain.enums.DeckVisibility
 import com.crs.bluered.ui.theme.BlueRedTheme
 
@@ -58,6 +59,30 @@ fun DeckListScreenPreview() {
                     ),
                     DeckListItem(
                         id = "2",
+                        title = "Choices Game",
+                        maxMembers = null,
+                        ownerId = "user-2",
+                        visibility = DeckVisibility.PRIVATE,
+                        isOfficial = false,
+                        isActive = true,
+                        createdAt = "2025-01-02",
+                        cardsCount = 5,
+                        optionsCount = 10
+                    ),
+                    DeckListItem(
+                        id = "3",
+                        title = "Choices Game",
+                        maxMembers = null,
+                        ownerId = "user-2",
+                        visibility = DeckVisibility.PRIVATE,
+                        isOfficial = false,
+                        isActive = true,
+                        createdAt = "2025-01-02",
+                        cardsCount = 5,
+                        optionsCount = 10
+                    ),
+                    DeckListItem(
+                        id = "4",
                         title = "Choices Game",
                         maxMembers = null,
                         ownerId = "user-2",

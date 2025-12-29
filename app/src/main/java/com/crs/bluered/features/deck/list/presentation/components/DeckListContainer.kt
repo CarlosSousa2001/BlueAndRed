@@ -1,18 +1,16 @@
-package com.crs.bluered.features.deck.list.presentation
+package com.crs.bluered.features.deck.list.presentation.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.PrimaryTabRow
+import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -21,13 +19,23 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.crs.bluered.R
 import com.crs.bluered.core.domain.model.PaginationMeta
 import com.crs.bluered.features.deck.list.domain.model.DeckListItem
-import com.crs.bluered.features.deck.list.presentation.components.DeckItemsList
+import com.crs.bluered.features.deck.list.presentation.DeckListUiState
 import com.crs.bluered.shared.domain.enums.DeckVisibility
+import com.crs.bluered.ui.components.BRButton
+import com.crs.bluered.ui.components.states.EmptyState
+import com.crs.bluered.ui.components.states.ErrorState
 import com.crs.bluered.ui.theme.BlueRedTheme
+import com.crs.bluered.ui.theme.BlueRedThemeSizing.sizing
 
 @Composable
 fun DeckListContainer(
@@ -41,12 +49,10 @@ fun DeckListContainer(
 ) {
     val gridState = rememberLazyGridState()
 
-    // ✅ primeira carga (recomendado no Compose)
     LaunchedEffect(Unit) {
         onLoadIfNeeded()
     }
 
-    // ✅ gatilho de paginação (chegou perto do fim)
     val shouldLoadMore by remember {
         derivedStateOf {
             val total = gridState.layoutInfo.totalItemsCount
@@ -64,40 +70,60 @@ fun DeckListContainer(
         }
     }
 
+    val tabs = remember { listOf("Global", "Privados", "Meus Decks") }
+
+    val selectedTabIndex = remember(state.visibility) {
+        when (state.visibility) {
+            null -> 0          // Global
+            "PRIVATE" -> 1     // Privados
+            else -> 0          // fallback
+        }
+    }
+
     Column(
         modifier = modifier
             .fillMaxSize()
             .padding(paddingValues)
+            .padding(sizing.sm),
     ) {
 
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        PrimaryTabRow(
+            selectedTabIndex = selectedTabIndex,
+            containerColor = Color.Transparent
         ) {
-            val current = state.visibility
+            tabs.forEachIndexed { index, label ->
+                val isSelected = selectedTabIndex == index
 
-            Button(
-                onClick = { onChangeVisibility(null) },
-                enabled = current != null
-            ) { Text("All") }
-
-            Button(
-                onClick = { onChangeVisibility("PUBLIC") },
-                enabled = current != "PUBLIC"
-            ) { Text("Public") }
-
-            Button(
-                onClick = { onChangeVisibility("PRIVATE") },
-                enabled = current != "PRIVATE"
-            ) { Text("Private") }
-
-            OutlinedButton(
-                onClick = onRefresh
-            ) { Text("Refresh") }
+                Tab(
+                    selected = isSelected,
+                    onClick = {
+                        when (index) {
+                            0 -> onChangeVisibility(null)
+                            1 -> onChangeVisibility("PRIVATE")
+                            2 -> onChangeVisibility(null)
+                        }
+                    },
+                    text = {
+                        Text(
+                            text = label.uppercase(),
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.ExtraBold,
+                        )
+                    }
+                )
+            }
         }
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(sizing.s1m))
 
-        // ✅ estados da tela
+//        BRButton(
+//            onClick = onRefresh,
+//            text = "Refresh",
+//            loading = state.isLoading && state.items.isNotEmpty()
+//        )
+
+        Spacer(modifier = Modifier.height(sizing.s1m))
+
         when {
             state.isLoading && state.items.isEmpty() -> {
                 Column(
@@ -106,34 +132,25 @@ fun DeckListContainer(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     CircularProgressIndicator()
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(sizing.sm))
                     Text("Carregando...")
                 }
             }
 
             state.errorMessage != null && state.items.isEmpty() -> {
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        text = state.errorMessage,
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                    Spacer(modifier = Modifier.height(12.dp))
-                    Button(onClick = onRefresh) { Text("Tentar novamente") }
-                }
+                ErrorState(
+                    message = state.errorMessage,
+                    onRetry = onRefresh,
+                    modifier = Modifier.fillMaxSize()
+                )
             }
 
             state.items.isEmpty() -> {
-                Column(
+                EmptyState(
                     modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text("Nenhum deck encontrado.")
-                }
+                    image = painterResource(R.drawable.bg_empty_state),
+                    title = "Nenhum deck encontrado",
+                )
             }
 
             else -> {
@@ -148,10 +165,7 @@ fun DeckListContainer(
     }
 }
 
-@Preview(
-    showBackground = true,
-    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES
-)
+@Preview(showBackground = true)
 @Composable
 private fun DeckListContainerPreview() {
     BlueRedTheme {

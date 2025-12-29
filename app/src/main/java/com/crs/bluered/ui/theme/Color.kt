@@ -82,3 +82,80 @@ val OnErrorDark = PureWhite
 
 val SuccessDark = Green500
 val WarningDark = Yellow500
+
+
+// ---------------------------------------------------
+// EXTRA TOKENS — METALLIC CARD GRADIENTS
+// ---------------------------------------------------
+
+data class BRGradient(
+    val from: Color,
+    val to: Color
+)
+
+// Metalized / premium gradients (Tailwind-like but deeper)
+val CardSteelBlue = BRGradient(
+    from = Color(0xFF3B82F6), // blue-500
+    to = Color(0xFF1E40AF)    // blue-800-ish
+)
+
+val CardTitaniumPurple = BRGradient(
+    from = Color(0xFFA855F7), // purple-500
+    to = Color(0xFF581C87)    // purple-900-ish
+)
+
+val CardEmeraldMetal = BRGradient(
+    from = Color(0xFF10B981), // emerald-500
+    to = Color(0xFF047857)    // emerald-700-ish
+)
+
+val CardBronzeCopper = BRGradient(
+    from = Color(0xFFF97316), // orange-500
+    to = Color(0xFF9A3412)    // orange-900-ish
+)
+
+val CardCrimsonMetal = BRGradient(
+    from = Color(0xFFEF4444), // red-500
+    to = Color(0xFF991B1B)    // red-800-ish
+)
+val CardGunmetalGray = BRGradient(
+    from = Color(0xFF6B7280), // gray-500
+    to = Color(0xFF111827)    // gray-900
+)
+
+// Cyan Metal
+val CardCyanMetal = BRGradient(
+    from = Color(0xFF06B6D4), // cyan-500
+    to = Color(0xFF0E7490)    // cyan-800
+)
+
+// Indigo Metal
+val CardIndigoMetal = BRGradient(
+    from = Color(0xFF6366F1), // indigo-500
+    to = Color(0xFF312E81)    // indigo-900
+)
+
+// Lime Metal
+val CardLimeMetal = BRGradient(
+    from = Color(0xFF84CC16), // lime-500
+    to = Color(0xFF365314)    // lime-900
+)
+
+// Rose Gold
+val CardRoseGoldMetal = BRGradient(
+    from = Color(0xFFF43F5E), // rose-500
+    to = Color(0xFF881337)    // rose-900
+)
+// Palette list to pick deterministically (by id hash)
+val DeckCardMetallicPalette = listOf(
+    CardSteelBlue,
+    CardTitaniumPurple,
+    CardEmeraldMetal,
+    CardBronzeCopper,
+    CardCrimsonMetal,
+    CardGunmetalGray,
+    CardCyanMetal,
+    CardIndigoMetal,
+    CardLimeMetal,
+    CardRoseGoldMetal
+)

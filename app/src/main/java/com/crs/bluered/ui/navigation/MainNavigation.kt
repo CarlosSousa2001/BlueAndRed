@@ -22,9 +22,8 @@ fun NavGraphBuilder.mainScreen() {
             onLoadIfNeeded = viewModel::loadIfNeeded,
             onRefresh = viewModel::refresh,
             onLoadMore = viewModel::loadMore,
-            onChangeVisibility = viewModel::changeVisibility
+            onChangeScope = viewModel::changeScope
         )
-
     }
 }
 

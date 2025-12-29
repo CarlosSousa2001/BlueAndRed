@@ -6,6 +6,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.crs.bluered.core.domain.model.PaginationMeta
 import com.crs.bluered.features.deck.list.domain.model.DeckListItem
 import com.crs.bluered.features.deck.list.presentation.components.DeckListContainer
+import com.crs.bluered.shared.domain.enums.DeckListScope
 import com.crs.bluered.shared.domain.enums.DeckVisibility
 import com.crs.bluered.ui.theme.BlueRedTheme
 
@@ -15,7 +16,7 @@ fun DeckListScreen(
     onLoadIfNeeded: () -> Unit,
     onRefresh: () -> Unit,
     onLoadMore: () -> Unit,
-    onChangeVisibility: (String?) -> Unit,
+    onChangeScope: (DeckListScope) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -27,7 +28,7 @@ fun DeckListScreen(
                 onLoadIfNeeded = onLoadIfNeeded,
                 onRefresh = onRefresh,
                 onLoadMore = onLoadMore,
-                onChangeVisibility = onChangeVisibility,
+                onChangeScope = onChangeScope,
                 paddingValues = paddingValues
             )
         }
@@ -96,8 +97,6 @@ fun DeckListScreenPreview() {
                 ),
                 page = 1,
                 perPage = 10,
-                visibility = null,
-                isOfficial = null,
                 isLoading = false,
                 isLoadingMore = false,
                 meta = PaginationMeta(
@@ -113,7 +112,7 @@ fun DeckListScreenPreview() {
             onLoadIfNeeded = {},
             onRefresh = {},
             onLoadMore = {},
-            onChangeVisibility = {}
+            onChangeScope = {}
         )
     }
 }

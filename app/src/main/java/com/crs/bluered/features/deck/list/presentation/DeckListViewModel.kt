@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.crs.bluered.core.utils.extensions.observerState
 import com.crs.bluered.features.deck.list.domain.usecase.DeckListUseCase
+import com.crs.bluered.shared.domain.enums.DeckListScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -44,10 +45,10 @@ class DeckListViewModel @Inject constructor(
         fetchPage(page = nextPage, mode = FetchMode.LoadMore)
     }
 
-    fun changeVisibility(value: String?) {
+    fun changeScope(value: DeckListScope) {
         _uiState.update {
             it.copy(
-                visibility = value,
+                scope = value,
                 page = 1,
                 meta = null,
                 items = emptyList(),
@@ -74,8 +75,7 @@ class DeckListViewModel @Inject constructor(
                 DeckListUseCase.Parameters(
                     page = page,
                     perPage = state.perPage,
-                    visibility = state.visibility,
-                    isOfficial = state.isOfficial
+                    scope = state.scope
                 )
             ).observerState(
                 onLoading = {
@@ -85,7 +85,6 @@ class DeckListViewModel @Inject constructor(
                                 isLoadingMore = true,
                                 errorMessage = null
                             )
-
                             FetchMode.Initial, FetchMode.Refresh -> it.copy(
                                 isLoading = true,
                                 isLoadingMore = false,
@@ -107,15 +106,9 @@ class DeckListViewModel @Inject constructor(
                     }
                 },
                 onEmpty = {
-                    // para listagem paginada, "empty" normalmente significa:
-                    // - initial: não tem itens
-                    // - loadMore: não veio mais nada
                     _uiState.update {
                         when (mode) {
-                            FetchMode.LoadMore -> it.copy(
-                                isLoadingMore = false
-                            )
-
+                            FetchMode.LoadMore -> it.copy(isLoadingMore = false)
                             FetchMode.Initial, FetchMode.Refresh -> it.copy(
                                 isLoading = false,
                                 isLoadingMore = false,
@@ -150,5 +143,4 @@ class DeckListViewModel @Inject constructor(
         Refresh,
         LoadMore
     }
-
 }

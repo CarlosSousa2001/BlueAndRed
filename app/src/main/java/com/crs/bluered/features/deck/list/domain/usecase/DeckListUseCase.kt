@@ -5,6 +5,7 @@ import com.crs.bluered.core.utils.ResponseData
 import com.crs.bluered.core.utils.ServiceResult
 import com.crs.bluered.features.deck.list.domain.model.DeckListItem
 import com.crs.bluered.features.deck.list.domain.repository.DeckListRepository
+import com.crs.bluered.shared.domain.enums.DeckListScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -14,8 +15,7 @@ interface DeckListUseCase {
     data class Parameters(
         val page: Int = 1,
         val perPage: Int = 10,
-        val visibility: String? = null,
-        val isOfficial: Boolean? = null
+        val scope: DeckListScope = DeckListScope.GLOBAL
     )
 }
 
@@ -29,8 +29,7 @@ class DeckListUseCaseImpl @Inject constructor(
             val repoParams = DeckListRepository.Params(
                 page = parameters.page,
                 perPage = parameters.perPage,
-                visibility = parameters.visibility,
-                isOfficial = parameters.isOfficial
+                scope = parameters.scope
             )
 
             when (val result = repository.list(params = repoParams)) {

@@ -16,75 +16,62 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.crs.bluered.R
 import com.crs.bluered.features.deck.list.domain.model.DeckListItem
-import com.crs.bluered.ui.theme.PureWhite
-import com.crs.bluered.ui.theme.SuccessLight
-import com.crs.bluered.ui.theme.WarningLight
 import com.crs.bluered.ui.theme.BlueRedThemeSizing.sizing
+import com.crs.bluered.ui.theme.DeckCardMetallicPalette
+import com.crs.bluered.ui.theme.PureWhite
+
 @Composable
 fun DeckListItemCard(
     item: DeckListItem,
     modifier: Modifier = Modifier
 ) {
 
-    val cs = MaterialTheme.colorScheme
+    val gradient = remember(item.id) {
+        val index = kotlin.math.abs(item.id.hashCode()) % DeckCardMetallicPalette.size
+        DeckCardMetallicPalette[index]
+    }
 
-    // ✅ paleta "base" (igual ideia do button: cores seguras e bonitas)
-    val palette = remember(cs) {
-        listOf(
-            cs.primaryContainer,
-            cs.secondaryContainer,
-            cs.tertiaryContainer,
-            SuccessLight,
-            WarningLight
+    val gradientBrush = remember(gradient) {
+        Brush.linearGradient(
+            colors = listOf(gradient.from, gradient.to),
+            start = Offset(0f, 0f),
+            end = Offset(800f, 600f)
         )
-    }
-
-    val containerColor = remember(item.id, palette) {
-        val index = kotlin.math.abs(item.id.hashCode()) % palette.size
-        palette[index]
-    }
-
-    // ✅ contentColor simples: se for Success/Warning usa branco; senão usa on*Container
-    val contentColor = remember(containerColor) {
-        when (containerColor) {
-            SuccessLight, WarningLight -> PureWhite
-            else -> cs.onSurface // simples e seguro; se quiser mais “perfeito”, uso on*Container
-        }
     }
 
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .height(192.dp) // 🔹 controla a “verticalidade” do card
+            .height(192.dp)
             .background(
-                color = containerColor,
+                brush = gradientBrush,
                 shape = RoundedCornerShape(sizing.md)
             )
             .border(
                 width = 1.dp,
-                color = cs.outline,
+                color = Color.White.copy(alpha = 0.18f),
                 shape = RoundedCornerShape(sizing.md)
             )
             .padding(sizing.md)
     ) {
 
-        // 🔹 Título no topo
         Text(
             text = item.title,
             style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold,
-            color = contentColor,
+            fontWeight = FontWeight.ExtraBold,
+            color = PureWhite,
             maxLines = 2
         )
 
-        // 🔹 Espaço grande entre título e contadores
         Spacer(modifier = Modifier.weight(1f))
 
-        // 🔹 Contadores no rodapé do card
         Row(
             horizontalArrangement = Arrangement.spacedBy(sizing.m2d),
             verticalAlignment = Alignment.CenterVertically
@@ -92,13 +79,13 @@ fun DeckListItemCard(
             DeckCounter(
                 iconRes = R.drawable.ic_deck_icon_24,
                 value = item.cardsCount,
-                tint = contentColor
+                tint = PureWhite
             )
 
             DeckCounter(
                 iconRes = R.drawable.ic_card_icon_24,
                 value = item.optionsCount,
-                tint = contentColor
+                tint = PureWhite
             )
         }
     }

@@ -25,8 +25,7 @@ class DeckListRemoteDataSourceImpl @Inject constructor(
                 url {
                     parameters.append("page", params.page.toString())
                     parameters.append("perPage", params.perPage.toString())
-                    params.visibility?.let { parameters.append("visibility", it) }
-                    params.isOfficial?.let { parameters.append("isOfficial", it.toString()) }
+                    parameters.append("scope", params.scope.toString())
                 }
             }
 

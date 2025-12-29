@@ -12,15 +12,14 @@ import javax.inject.Inject
 class DeckListRepositoryImpl @Inject constructor(
     private val remoteDataSource: DeckListRemoteDataSource,
     private val dispatchersProvider: DispatchersProvider
-): DeckListRepository {
+) : DeckListRepository {
     override suspend fun list(params: DeckListRepository.Params): ServiceResult<PaginatedResponse<DeckListItem>> {
         return withContext(dispatchersProvider.io()) {
             remoteDataSource.list(
                 params = DeckListRemoteDataSource.Params(
                     page = params.page,
                     perPage = params.perPage,
-                    visibility = params.visibility,
-                    isOfficial = params.isOfficial
+                    scope = params.scope
                 )
             )
         }

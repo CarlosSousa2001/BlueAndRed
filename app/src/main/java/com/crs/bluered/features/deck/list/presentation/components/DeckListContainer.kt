@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
@@ -21,7 +22,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -30,8 +30,8 @@ import com.crs.bluered.R
 import com.crs.bluered.core.domain.model.PaginationMeta
 import com.crs.bluered.features.deck.list.domain.model.DeckListItem
 import com.crs.bluered.features.deck.list.presentation.DeckListUiState
+import com.crs.bluered.shared.domain.enums.DeckListScope
 import com.crs.bluered.shared.domain.enums.DeckVisibility
-import com.crs.bluered.ui.components.BRButton
 import com.crs.bluered.ui.components.states.EmptyState
 import com.crs.bluered.ui.components.states.ErrorState
 import com.crs.bluered.ui.theme.BlueRedTheme
@@ -43,15 +43,13 @@ fun DeckListContainer(
     onLoadIfNeeded: () -> Unit,
     onRefresh: () -> Unit,
     onLoadMore: () -> Unit,
-    onChangeVisibility: (String?) -> Unit,
+    onChangeScope: (DeckListScope) -> Unit,
     modifier: Modifier = Modifier,
     paddingValues: PaddingValues
 ) {
     val gridState = rememberLazyGridState()
 
-    LaunchedEffect(Unit) {
-        onLoadIfNeeded()
-    }
+    LaunchedEffect(Unit) { onLoadIfNeeded() }
 
     val shouldLoadMore by remember {
         derivedStateOf {
@@ -65,18 +63,16 @@ fun DeckListContainer(
     }
 
     LaunchedEffect(shouldLoadMore, state.canLoadMore) {
-        if (shouldLoadMore && state.canLoadMore) {
-            onLoadMore()
-        }
+        if (shouldLoadMore && state.canLoadMore) onLoadMore()
     }
 
     val tabs = remember { listOf("Global", "Privados", "Meus Decks") }
 
-    val selectedTabIndex = remember(state.visibility) {
-        when (state.visibility) {
-            null -> 0          // Global
-            "PRIVATE" -> 1     // Privados
-            else -> 0          // fallback
+    val selectedTabIndex = remember(state.scope) {
+        when (state.scope) {
+            DeckListScope.GLOBAL -> 0
+            DeckListScope.PRIVATE -> 1
+            DeckListScope.ME -> 2
         }
     }
 
@@ -89,18 +85,17 @@ fun DeckListContainer(
 
         PrimaryTabRow(
             selectedTabIndex = selectedTabIndex,
-            containerColor = Color.Transparent
+            containerColor = Color.Transparent,
+            divider = {}
         ) {
             tabs.forEachIndexed { index, label ->
-                val isSelected = selectedTabIndex == index
-
                 Tab(
-                    selected = isSelected,
+                    selected = selectedTabIndex == index,
                     onClick = {
                         when (index) {
-                            0 -> onChangeVisibility(null)
-                            1 -> onChangeVisibility("PRIVATE")
-                            2 -> onChangeVisibility(null)
+                            0 -> onChangeScope(DeckListScope.GLOBAL)
+                            1 -> onChangeScope(DeckListScope.PRIVATE)
+                            2 -> onChangeScope(DeckListScope.ME)
                         }
                     },
                     text = {
@@ -108,21 +103,14 @@ fun DeckListContainer(
                             text = label.uppercase(),
                             fontSize = 14.sp,
                             fontWeight = FontWeight.ExtraBold,
+                            color = MaterialTheme.colorScheme.onBackground
                         )
                     }
                 )
             }
         }
 
-        Spacer(modifier = Modifier.height(sizing.s1m))
-
-//        BRButton(
-//            onClick = onRefresh,
-//            text = "Refresh",
-//            loading = state.isLoading && state.items.isNotEmpty()
-//        )
-
-        Spacer(modifier = Modifier.height(sizing.s1m))
+        Spacer(modifier = Modifier.height(sizing.lg))
 
         when {
             state.isLoading && state.items.isEmpty() -> {
@@ -199,8 +187,7 @@ private fun DeckListContainerPreview() {
                 ),
                 page = 1,
                 perPage = 10,
-                visibility = null,
-                isOfficial = null,
+                scope = DeckListScope.GLOBAL,
                 isLoading = false,
                 isLoadingMore = false,
                 meta = PaginationMeta(
@@ -216,7 +203,7 @@ private fun DeckListContainerPreview() {
             onLoadIfNeeded = {},
             onRefresh = {},
             onLoadMore = {},
-            onChangeVisibility = {},
+            onChangeScope = {},
             paddingValues = PaddingValues(0.dp)
         )
     }

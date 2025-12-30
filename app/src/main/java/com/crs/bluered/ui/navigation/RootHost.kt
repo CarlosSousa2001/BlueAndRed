@@ -32,7 +32,12 @@ fun RootHost(
         )
 
         mainGraph(
-            onNavigateAnotherScreen = {}
+            onNavigationToMainListScreen = {
+                navController.navigateToMainGraph()
+            },
+            onNavigateToCreateDeckScreen = {
+                navController.navigateToCreateDeckScreen()
+            }
         )
     }
 }

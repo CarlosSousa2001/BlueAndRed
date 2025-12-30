@@ -11,7 +11,9 @@ import com.crs.bluered.features.deck.list.presentation.DeckListScreen
 import com.crs.bluered.features.deck.list.presentation.DeckListViewModel
 import com.crs.bluered.ui.navigation.screens.MainScreens
 
-fun NavGraphBuilder.mainScreen() {
+fun NavGraphBuilder.mainScreen(
+    onNavigateToCreateDeckScreen: () -> Unit
+) {
     composable<MainScreens.HomeScreen> {
 
         val viewModel: DeckListViewModel = hiltViewModel<DeckListViewModel>()
@@ -22,7 +24,8 @@ fun NavGraphBuilder.mainScreen() {
             onLoadIfNeeded = viewModel::loadIfNeeded,
             onRefresh = viewModel::refresh,
             onLoadMore = viewModel::loadMore,
-            onChangeScope = viewModel::changeScope
+            onChangeScope = viewModel::changeScope,
+            onNavigateToCreateDeckScreen = onNavigateToCreateDeckScreen
         )
     }
 }

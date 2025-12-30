@@ -10,6 +10,7 @@ fun DeckResponseEntity.toDeckResponseEntityDto(): DeckResponseEntityDto {
         ownerId = ownerId,
         maxMembers = maxMembers,
         visibility = visibility,
+        inviteCode = inviteCode,
         isOfficial = isOfficial,
         isActive = isActive,
         createdAt = createdAt

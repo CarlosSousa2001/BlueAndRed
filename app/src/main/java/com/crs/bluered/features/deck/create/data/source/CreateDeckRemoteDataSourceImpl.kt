@@ -18,7 +18,7 @@ class CreateDeckRemoteDataSourceImpl @Inject constructor(
 ) : CreateDeckRemoteDataSource {
     override suspend fun create(input: CreateDeckModel): ServiceResult<DeckResponseEntity> {
         return try {
-            val response = client.post("deck/create") {
+            val response = client.post("deck") {
                 contentType(ContentType.Application.Json)
                 setBody(input.toCreateDeckModelDto())
             }

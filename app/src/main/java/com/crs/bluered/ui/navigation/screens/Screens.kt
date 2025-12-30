@@ -29,4 +29,7 @@ sealed interface AuthScreens {
 sealed interface MainScreens {
     @Serializable
     data object HomeScreen: MainScreens
+
+    @Serializable
+    data object CreateDeckScreen: MainScreens
 }

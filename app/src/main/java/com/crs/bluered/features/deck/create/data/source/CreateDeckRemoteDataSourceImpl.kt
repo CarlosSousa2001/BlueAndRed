@@ -4,6 +4,8 @@ import com.crs.bluered.core.utils.ServiceResult
 import com.crs.bluered.features.deck.create.data.model.mappers.toCreateDeckModelDto
 import com.crs.bluered.features.deck.create.domain.model.CreateDeckModel
 import com.crs.bluered.features.deck.create.domain.source.CreateDeckRemoteDataSource
+import com.crs.bluered.shared.data.dto.DeckResponseEntityDto
+import com.crs.bluered.shared.data.mappers.toDomainDeckResponseEntity
 import com.crs.bluered.shared.domain.entities.DeckResponseEntity
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -24,7 +26,8 @@ class CreateDeckRemoteDataSourceImpl @Inject constructor(
             }
 
             if (response.status.value in 200..299) {
-                ServiceResult.Success(response.body())
+                val dto = response.body<DeckResponseEntityDto>()
+                ServiceResult.Success(dto.toDomainDeckResponseEntity())
             } else {
                 ServiceResult.Error(
                     code = response.status.value.toString(),

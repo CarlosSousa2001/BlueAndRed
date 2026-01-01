@@ -1,6 +1,7 @@
 package com.crs.bluered.core.data.remote.response
 
 import com.crs.bluered.core.data.local.datastore.DataStoreLocalDataSource
+import com.crs.bluered.core.session.SessionManager
 import com.crs.bluered.core.utils.DispatchersProvider
 import com.crs.bluered.core.utils.logging.logInfo
 import kotlinx.coroutines.flow.firstOrNull
@@ -11,7 +12,8 @@ import javax.inject.Inject
 
 class AccessTokenInterceptor @Inject constructor(
     private val localDataSource: DataStoreLocalDataSource,
-    private val dispatchersProvider: DispatchersProvider
+    private val dispatchersProvider: DispatchersProvider,
+    private val sessionManager: SessionManager
 ) : Interceptor {
 
     companion object {
@@ -29,13 +31,21 @@ class AccessTokenInterceptor @Inject constructor(
             null
         }
 
-        val request = chain.request().newBuilder()
+        val requestBuilder = chain.request().newBuilder()
 
-        data?.token.let { token ->
-            request.addHeader(HEADER_AUTHORIZATION, "$TOKEN_TYPE $token")
-        } ?: run {
-            logInfo("INTERCEPTOR", "Token is null")
+        val token = data?.token.orEmpty()
+        if (token.isNotBlank()) {
+            requestBuilder.addHeader(HEADER_AUTHORIZATION, "$TOKEN_TYPE $token")
         }
-        return chain.proceed(request.build())
+
+        val response = chain.proceed(requestBuilder.build())
+
+        if (response.code == 401) {
+            runBlocking(dispatchersProvider.io()) {
+                sessionManager.onUnauthorized()
+            }
+        }
+
+        return response
     }
 }

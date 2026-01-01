@@ -8,10 +8,12 @@ enum class DeckVisibility(
     PRIVATE(apiValue = "PRIVATE", label = "Privado");
 
     companion object {
-        fun fromApiValue(value: String): DeckVisibility? =
+        fun fromApiValue(value: String): DeckVisibility =
             entries.firstOrNull { it.apiValue.equals(value, ignoreCase = true) }
+                ?: PUBLIC
 
-        fun fromLabel(label: String): DeckVisibility? =
+        fun fromLabel(label: String): DeckVisibility =
             entries.firstOrNull { it.label.equals(label, ignoreCase = true) }
+                ?: PUBLIC
     }
 }

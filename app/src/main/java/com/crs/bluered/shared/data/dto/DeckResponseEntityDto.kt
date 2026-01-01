@@ -9,7 +9,7 @@ data class DeckResponseEntityDto(
     val title: String,
     val ownerId: String,
     val maxMembers: Int?,
-    val visibility: DeckVisibility,
+    val visibility: String,
     val inviteCode: String,
     val isOfficial: Boolean,
     val isActive: Boolean,

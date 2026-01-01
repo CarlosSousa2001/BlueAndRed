@@ -7,6 +7,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import com.crs.bluered.features.deck.list.presentation.DeckListEvent
 import com.crs.bluered.features.deck.list.presentation.DeckListScreen
 import com.crs.bluered.features.deck.list.presentation.DeckListViewModel
 import com.crs.bluered.ui.navigation.screens.MainScreens
@@ -21,10 +22,10 @@ fun NavGraphBuilder.mainScreen(
 
         DeckListScreen(
             uiState = uiState,
-            onLoadIfNeeded = viewModel::loadIfNeeded,
-            onRefresh = viewModel::refresh,
-            onLoadMore = viewModel::loadMore,
-            onChangeScope = viewModel::changeScope,
+            onLoadIfNeeded = { viewModel.onEvent(DeckListEvent.LoadIfNeeded) },
+            onRefresh = { viewModel.onEvent(DeckListEvent.Refresh) },
+            onLoadMore = { viewModel.onEvent(DeckListEvent.LoadMore) },
+            onChangeScope = { viewModel.onEvent(DeckListEvent.ChangeScope(it)) },
             onNavigateToCreateDeckScreen = onNavigateToCreateDeckScreen
         )
     }

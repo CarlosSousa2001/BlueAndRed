@@ -26,17 +26,31 @@ class DeckListViewModel @Inject constructor(
     private var fetchJob: Job? = null
     private var lastRequestedPage: Int? = null
 
-    fun loadIfNeeded() {
+    fun onEvent(event: DeckListEvent) {
+        when (event) {
+            DeckListEvent.LoadIfNeeded -> loadIfNeeded()
+            DeckListEvent.Refresh -> refresh()
+            DeckListEvent.LoadMore -> loadMore()
+            DeckListEvent.ClearError -> clearError()
+            is DeckListEvent.ChangeScope -> changeScope(event.value)
+        }
+    }
+
+    private fun clearError() {
+        _uiState.update { it.copy(errorMessage = null) }
+    }
+
+    private fun loadIfNeeded() {
         if (hasLoadedOnce) return
         hasLoadedOnce = true
         fetchInitial()
     }
 
-    fun refresh() {
+    private fun refresh() {
         fetchInitial(isRefresh = true)
     }
 
-    fun loadMore() {
+    private fun loadMore() {
         val state = _uiState.value
         val nextPage = state.meta?.nextPage ?: return
         if (!state.canLoadMore) return
@@ -45,7 +59,7 @@ class DeckListViewModel @Inject constructor(
         fetchPage(page = nextPage, mode = FetchMode.LoadMore)
     }
 
-    fun changeScope(value: DeckListScope) {
+    private fun changeScope(value: DeckListScope) {
         _uiState.update {
             it.copy(
                 scope = value,
@@ -81,10 +95,7 @@ class DeckListViewModel @Inject constructor(
                 onLoading = {
                     _uiState.update {
                         when (mode) {
-                            FetchMode.LoadMore -> it.copy(
-                                isLoadingMore = true,
-                                errorMessage = null
-                            )
+                            FetchMode.LoadMore -> it.copy(isLoadingMore = true, errorMessage = null)
                             FetchMode.Initial, FetchMode.Refresh -> it.copy(
                                 isLoading = true,
                                 isLoadingMore = false,
@@ -138,9 +149,5 @@ class DeckListViewModel @Inject constructor(
         }
     }
 
-    private enum class FetchMode {
-        Initial,
-        Refresh,
-        LoadMore
-    }
+    private enum class FetchMode { Initial, Refresh, LoadMore }
 }

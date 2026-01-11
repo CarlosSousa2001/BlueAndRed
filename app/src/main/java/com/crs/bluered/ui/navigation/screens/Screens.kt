@@ -32,4 +32,7 @@ sealed interface MainScreens {
 
     @Serializable
     data object CreateDeckScreen: MainScreens
+
+    @Serializable
+    data class CardScreen(val deckId: String, val deckTitle: String): MainScreens
 }

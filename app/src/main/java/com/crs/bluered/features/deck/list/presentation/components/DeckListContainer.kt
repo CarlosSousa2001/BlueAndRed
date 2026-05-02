@@ -44,6 +44,7 @@ fun DeckListContainer(
     onRefresh: () -> Unit,
     onLoadMore: () -> Unit,
     onChangeScope: (DeckListScope) -> Unit,
+    onDeckClick: (DeckListItem) -> Unit,
     modifier: Modifier = Modifier,
     paddingValues: PaddingValues
 ) {
@@ -146,6 +147,7 @@ fun DeckListContainer(
                     items = state.items,
                     gridState = gridState,
                     isLoadingMore = state.isLoadingMore,
+                    onDeckClick = onDeckClick,
                     modifier = Modifier.fillMaxSize(),
                 )
             }
@@ -204,6 +206,7 @@ private fun DeckListContainerPreview() {
             onRefresh = {},
             onLoadMore = {},
             onChangeScope = {},
+            onDeckClick = {},
             paddingValues = PaddingValues(0.dp)
         )
     }

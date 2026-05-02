@@ -1,5 +1,6 @@
 package com.crs.bluered.features.deck.list.presentation.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -30,6 +31,7 @@ import com.crs.bluered.ui.theme.PureWhite
 @Composable
 fun DeckListItemCard(
     item: DeckListItem,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -59,6 +61,7 @@ fun DeckListItemCard(
                 color = Color.White.copy(alpha = 0.18f),
                 shape = RoundedCornerShape(sizing.md)
             )
+            .clickable(onClick = onClick)
             .padding(sizing.md)
     ) {
 

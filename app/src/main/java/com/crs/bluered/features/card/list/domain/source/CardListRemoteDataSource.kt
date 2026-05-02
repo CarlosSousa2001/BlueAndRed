@@ -2,11 +2,11 @@ package com.crs.bluered.features.card.list.domain.source
 
 import com.crs.bluered.core.domain.model.PaginatedResponse
 import com.crs.bluered.core.utils.ServiceResult
-import com.crs.bluered.shared.domain.entities.CardOptionsResponseEntity
+import com.crs.bluered.shared.domain.entities.CardResponseEntity
 
 interface CardListRemoteDataSource {
 
-    suspend fun list(params: Params): ServiceResult<PaginatedResponse<CardOptionsResponseEntity>>
+    suspend fun list(params: Params): ServiceResult<PaginatedResponse<CardResponseEntity>>
     data class Params(
         val page: Int = 1,
         val perPage: Int = 10,

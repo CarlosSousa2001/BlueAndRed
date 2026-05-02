@@ -32,6 +32,7 @@ fun DeckListScreen(
     onLoadMore: () -> Unit,
     onChangeScope: (DeckListScope) -> Unit,
     onNavigateToCreateDeckScreen: () -> Unit,
+    onDeckClick: (DeckListItem) -> Unit,
     onOpenJoinDeckModal: () -> Unit = {}
 ) {
 
@@ -94,6 +95,7 @@ fun DeckListScreen(
                 onRefresh = onRefresh,
                 onLoadMore = onLoadMore,
                 onChangeScope = onChangeScope,
+                onDeckClick = onDeckClick,
                 paddingValues = paddingValues
             )
         }
@@ -178,7 +180,8 @@ fun DeckListScreenPreview() {
             onRefresh = {},
             onLoadMore = {},
             onChangeScope = {},
-            onNavigateToCreateDeckScreen = {}
+            onNavigateToCreateDeckScreen = {},
+            onDeckClick = {}
         )
     }
 }

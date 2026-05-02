@@ -7,13 +7,22 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import com.crs.bluered.features.deck.list.domain.model.DeckListItem
 import com.crs.bluered.features.deck.list.presentation.DeckListEvent
 import com.crs.bluered.features.deck.list.presentation.DeckListScreen
 import com.crs.bluered.features.deck.list.presentation.DeckListViewModel
+import com.crs.bluered.shared.domain.enums.DeckListScope
 import com.crs.bluered.ui.navigation.screens.MainScreens
 
 fun NavGraphBuilder.mainScreen(
-    onNavigateToCreateDeckScreen: () -> Unit
+    onNavigateToCreateDeckScreen: () -> Unit,
+    onNavigateToCardScreen: (
+        deckId: String,
+        deckTitle: String,
+        canEdit: Boolean,
+        visibility: String,
+        maxMembers: Int?
+    ) -> Unit
 ) {
     composable<MainScreens.HomeScreen> {
 
@@ -26,7 +35,16 @@ fun NavGraphBuilder.mainScreen(
             onRefresh = { viewModel.onEvent(DeckListEvent.Refresh) },
             onLoadMore = { viewModel.onEvent(DeckListEvent.LoadMore) },
             onChangeScope = { viewModel.onEvent(DeckListEvent.ChangeScope(it)) },
-            onNavigateToCreateDeckScreen = onNavigateToCreateDeckScreen
+            onNavigateToCreateDeckScreen = onNavigateToCreateDeckScreen,
+            onDeckClick = { item: DeckListItem ->
+                onNavigateToCardScreen(
+                    item.id,
+                    item.title,
+                    uiState.scope == DeckListScope.ME,
+                    item.visibility.apiValue,
+                    item.maxMembers
+                )
+            }
         )
     }
 }

@@ -21,6 +21,7 @@ fun DeckItemsList(
     items: List<DeckListItem>,
     gridState: LazyGridState,
     isLoadingMore: Boolean,
+    onDeckClick: (DeckListItem) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyVerticalGrid(
@@ -36,7 +37,8 @@ fun DeckItemsList(
             key = { it.id }
         ) { item ->
             DeckListItemCard(
-                item = item
+                item = item,
+                onClick = { onDeckClick(item) }
             )
         }
 

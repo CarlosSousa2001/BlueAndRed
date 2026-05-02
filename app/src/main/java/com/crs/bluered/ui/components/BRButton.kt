@@ -6,10 +6,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,6 +38,7 @@ fun BRButton(
     modifier: Modifier = Modifier,
     style: ButtonStyle = ButtonStyle.Primary,
     enabled: Boolean = true,
+    loading: Boolean = false,
     leadingIcon: (@Composable (() -> Unit))? = null,
     trailingIcon: (@Composable (() -> Unit))? = null,
 ) {
@@ -45,47 +48,66 @@ fun BRButton(
         ButtonStyle.Primary -> ButtonDefaults.buttonColors(
             containerColor = cs.primary,
             contentColor = cs.onPrimary,
-            disabledContainerColor = cs.surfaceVariant,
+            disabledContainerColor = cs.primary.copy(alpha = 0.75f),
             disabledContentColor = cs.onSurface.copy(alpha = 0.38f)
         )
 
         ButtonStyle.Secondary -> ButtonDefaults.buttonColors(
             containerColor = cs.secondaryContainer,
             contentColor = cs.onSecondaryContainer,
-            disabledContainerColor = cs.surfaceVariant,
+            disabledContainerColor = cs.secondaryContainer.copy(alpha = 0.75f),
             disabledContentColor = cs.onSurface.copy(alpha = 0.38f)
         )
 
         ButtonStyle.Success -> ButtonDefaults.buttonColors(
             containerColor = SuccessLight,
             contentColor = PureWhite,
-            disabledContainerColor = cs.surfaceVariant,
+            disabledContainerColor = SuccessLight.copy(alpha = 0.75f),
             disabledContentColor = cs.onSurface.copy(alpha = 0.38f)
         )
 
         ButtonStyle.Alert -> ButtonDefaults.buttonColors(
             containerColor = WarningLight,
             contentColor = PureWhite,
-            disabledContainerColor = cs.surfaceVariant,
+            disabledContainerColor = WarningLight.copy(alpha = 0.75f),
             disabledContentColor = cs.onSurface.copy(alpha = 0.38f)
         )
 
         ButtonStyle.Danger -> ButtonDefaults.buttonColors(
             containerColor = cs.error,
             contentColor = cs.onError,
-            disabledContainerColor = cs.surfaceVariant,
-            disabledContentColor = cs.onSurface.copy(alpha = 0.38f)
+            disabledContainerColor = cs.error.copy(alpha = 0.75f),
+            disabledContentColor = WarningLight.copy(alpha = 0.38f)
         )
+    }
+
+    val spinnerColor = when (style) {
+        ButtonStyle.Primary -> cs.onPrimary
+        ButtonStyle.Secondary -> cs.onSecondaryContainer
+        ButtonStyle.Success -> PureWhite
+        ButtonStyle.Alert -> PureWhite
+        ButtonStyle.Danger -> cs.onError
     }
 
     Button(
         onClick = onClick,
-        enabled = enabled,
+        enabled = enabled && !loading,
         colors = colors,
         shape = RoundedCornerShape(sizing.xs),
         contentPadding = ButtonDefaults.ContentPadding,
         modifier = modifier.height(sizing.x2l)
     ) {
+
+        if (loading) {
+            CircularProgressIndicator(
+                modifier = Modifier.size(sizing.lg),
+                strokeWidth = sizing.xs / 2,
+                color = spinnerColor
+            )
+            return@Button
+        }
+
+
         if (leadingIcon != null) {
             leadingIcon()
             Spacer(Modifier.width(sizing.sm))

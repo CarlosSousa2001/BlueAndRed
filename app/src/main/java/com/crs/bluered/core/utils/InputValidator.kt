@@ -2,6 +2,8 @@ package com.crs.bluered.core.utils
 
 import android.util.Patterns
 
+// Helpers centralizados para validação de inputs.
+// Estou usando esse padrão como alternativa a um "schema" de validação,
 object InputValidator {
 
     fun validateEmail(email: String): String? {
@@ -39,6 +41,34 @@ object InputValidator {
         if (value.isBlank()) {
             return Constants.EMPTY_FIELD
         }
+        return null
+    }
+
+    fun validateMinLength(
+        value: String,
+        min: Int,
+        message: String = "Mínimo de $min caracteres"
+    ): String? {
+        return if (value.trim().length < min) message else null
+    }
+
+    fun validateMaxLength(
+        value: String,
+        max: Int,
+        message: String = "Máximo de $max caracteres"
+    ): String? {
+        return if (value.trim().length > max) message else null
+    }
+
+    fun validateLengthRange(
+        value: String,
+        min: Int,
+        max: Int,
+        minMessage: String = "Mínimo de $min caracteres",
+        maxMessage: String = "Máximo de $max caracteres"
+    ): String? {
+        validateMinLength(value, min, minMessage)?.let { return it }
+        validateMaxLength(value, max, maxMessage)?.let { return it }
         return null
     }
 

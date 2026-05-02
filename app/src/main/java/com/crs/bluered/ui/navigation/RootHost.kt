@@ -32,7 +32,31 @@ fun RootHost(
         )
 
         mainGraph(
-            onNavigateAnotherScreen = {}
+            onNavigationToMainListScreen = {
+                if (!navController.popBackStack()) {
+                    navController.navigateToMainGraph()
+                }
+            },
+            onNavigateToCreateDeckScreen = {
+                navController.navigateToCreateDeckScreen()
+            },
+            onNavigateToCardScreen = { deckId, deckTitle, canEdit, visibility, maxMembers ->
+                navController.navigateToCardScreen(
+                    deckId = deckId,
+                    deckTitle = deckTitle,
+                    canEdit = canEdit,
+                    visibility = visibility,
+                    maxMembers = maxMembers
+                )
+            },
+            onNavigateToEditDeckScreen = { deckId, deckTitle, visibility, maxMembers ->
+                navController.navigateToEditDeckScreen(
+                    deckId = deckId,
+                    deckTitle = deckTitle,
+                    visibility = visibility,
+                    maxMembers = maxMembers
+                )
+            }
         )
     }
 }

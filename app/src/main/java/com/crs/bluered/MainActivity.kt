@@ -5,12 +5,15 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.crs.bluered.core.session.SessionState
 import com.crs.bluered.ui.navigation.RootHost
+import com.crs.bluered.ui.navigation.screens.Graphs
 import com.crs.bluered.ui.theme.BlueRedTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -29,8 +32,18 @@ class MainActivity : ComponentActivity() {
             BlueRedTheme {
 
                 val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+                val sessionState by viewModel.sessionState.collectAsStateWithLifecycle()
 
                 val navController: NavHostController = rememberNavController()
+
+                LaunchedEffect(sessionState) {
+                    if (sessionState is SessionState.Unauthorized) {
+                        navController.navigate(Graphs.AuthGraph) {
+                            popUpTo(0) { inclusive = true }
+                            launchSingleTop = true
+                        }
+                    }
+                }
 
                 RootHost(
                     startDestination = uiState.startDestination,

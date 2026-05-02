@@ -8,6 +8,8 @@ interface ValidateLoginInputUseCase {
     operator fun invoke(email: String, password: String): FieldErrors
 }
 
+// Use case responsável por centralizar as validações do formulário de login.
+// Ele chama os helpers do InputValidator e retorna um map com os erros encontrados.
 class ValidateLoginInputUseCaseImpl @Inject constructor() : ValidateLoginInputUseCase {
 
     override fun invoke(email: String, password: String): FieldErrors {

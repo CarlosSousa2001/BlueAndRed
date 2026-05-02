@@ -10,6 +10,8 @@ import com.crs.bluered.features.auth.login.domain.usecase.GetUserDataUseCase
 import com.crs.bluered.features.auth.login.domain.usecase.GetUserDataUseCaseImpl
 import com.crs.bluered.features.auth.login.domain.usecase.LoginUseCase
 import com.crs.bluered.features.auth.login.domain.usecase.LoginUseCaseImpl
+import com.crs.bluered.features.auth.login.domain.usecase.RemoveUserDataUseCase
+import com.crs.bluered.features.auth.login.domain.usecase.RemoveUserDataUseCaseImpl
 import com.crs.bluered.features.auth.login.domain.usecase.SaveLocalStorageTokenUserData
 import com.crs.bluered.features.auth.login.domain.usecase.SaveLocalStorageTokenUserDataImpl
 import com.crs.bluered.features.auth.login.domain.usecase.ValidateLoginInputUseCase
@@ -66,6 +68,15 @@ object LoginModule {
     @Provides
     fun provideGetUserDataCase(repository: LoginRepository): GetUserDataUseCase {
         return GetUserDataUseCaseImpl(repository)
+    }
+
+    @Provides
+    fun provideRemoveUserDataUseCase(
+        repository: LoginRepository,
+    ): RemoveUserDataUseCase {
+        return RemoveUserDataUseCaseImpl(
+            loginRepository = repository
+        )
     }
 
 }

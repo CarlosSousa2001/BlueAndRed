@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Get-ChildItem -Path \"E:\\\\projects-node.js\\\\redblue\\\\src\" -Recurse -Include \"*card*\" -o silent)",
+      "Bash(Select-Object FullName)",
+      "Bash(Find *)",
+      "Bash(xargs grep *)"
+    ]
+  }
+}

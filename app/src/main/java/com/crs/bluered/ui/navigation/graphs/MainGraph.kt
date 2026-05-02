@@ -3,6 +3,7 @@ package com.crs.bluered.ui.navigation.graphs
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.navigation
 import com.crs.bluered.ui.navigation.cardScreen
+import com.crs.bluered.ui.navigation.createCardScreen
 import com.crs.bluered.ui.navigation.createDeckScreen
 import com.crs.bluered.ui.navigation.editDeckScreen
 import com.crs.bluered.ui.navigation.mainScreen
@@ -19,6 +20,7 @@ fun NavGraphBuilder.mainGraph(
         visibility: String,
         maxMembers: Int?
     ) -> Unit,
+    onNavigateToCreateCardScreen: (deckId: String) -> Unit,
     onNavigateToEditDeckScreen: (
         deckId: String,
         deckTitle: String,
@@ -38,7 +40,11 @@ fun NavGraphBuilder.mainGraph(
         )
         cardScreen(
             onNavigateBack = onNavigationToMainListScreen,
+            onNavigateToCreateCardScreen = onNavigateToCreateCardScreen,
             onNavigateToEditDeckScreen = onNavigateToEditDeckScreen
+        )
+        createCardScreen(
+            onNavigationToMainListScreen = onNavigationToMainListScreen
         )
         editDeckScreen(
             onNavigateBack = onNavigationToMainListScreen

@@ -52,6 +52,7 @@ fun CardListScreen(
     onLoadMore: () -> Unit,
     onNavigateBack: () -> Unit,
     onNavigateToEditDeckScreen: () -> Unit,
+    onNavigateToCreateCardScreen: (deckId: String) -> Unit,
     onStartGameplay: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -75,6 +76,8 @@ fun CardListScreen(
             onLoadMore()
         }
     }
+
+    val onCreateCard = { onNavigateToCreateCardScreen(uiState.deckId) }
 
     Scaffold(
         modifier = modifier,
@@ -114,6 +117,7 @@ fun CardListScreen(
             listState = listState,
             paddingValues = paddingValues,
             onRefresh = onRefresh,
+            onNavigateToCreateCardScreen = onCreateCard,
             onStartGameplay = onStartGameplay
         )
     }
@@ -125,6 +129,7 @@ private fun CardListContent(
     listState: androidx.compose.foundation.lazy.LazyListState,
     paddingValues: PaddingValues,
     onRefresh: () -> Unit,
+    onNavigateToCreateCardScreen: () -> Unit,
     onStartGameplay: () -> Unit
 ) {
     when {
@@ -160,7 +165,7 @@ private fun CardListContent(
                 children = {
                     BRButton(
                         text = "Criar novo card",
-                        onClick = onStartGameplay,
+                        onClick = onNavigateToCreateCardScreen,
                         style = ButtonStyle.Success,
                     )
                 }
@@ -185,6 +190,12 @@ private fun CardListContent(
                             text = "Iniciar",
                             onClick = onStartGameplay,
                             style = ButtonStyle.Primary,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                        BRButton(
+                            text = "Novo card",
+                            onClick = onNavigateToCreateCardScreen,
+                            style = ButtonStyle.Success,
                             modifier = Modifier.fillMaxWidth()
                         )
                         Text(

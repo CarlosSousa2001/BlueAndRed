@@ -49,6 +49,9 @@ fun RootHost(
                     maxMembers = maxMembers
                 )
             },
+            onNavigateToCreateCardScreen = { deckId ->
+                navController.navigateToCreateCardScreen(deckId = deckId)
+            },
             onNavigateToEditDeckScreen = { deckId, deckTitle, visibility, maxMembers ->
                 navController.navigateToEditDeckScreen(
                     deckId = deckId,

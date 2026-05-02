@@ -13,6 +13,7 @@ import com.crs.bluered.ui.navigation.screens.MainScreens
 
 fun NavGraphBuilder.cardScreen(
     onNavigateBack: () -> Unit,
+    onNavigateToCreateCardScreen: (deckId: String) -> Unit,
     onNavigateToEditDeckScreen: (
         deckId: String,
         deckTitle: String,
@@ -38,6 +39,7 @@ fun NavGraphBuilder.cardScreen(
                     uiState.maxMembers
                 )
             },
+            onNavigateToCreateCardScreen = { onNavigateToCreateCardScreen(uiState.deckId) },
             onStartGameplay = {}
         )
     }

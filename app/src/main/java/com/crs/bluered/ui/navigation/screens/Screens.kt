@@ -43,6 +43,11 @@ sealed interface MainScreens {
     ) : MainScreens
 
     @Serializable
+    data class CreateCardScreen(
+        val deckId: String,
+    ) : MainScreens
+
+    @Serializable
     data class EditDeckScreen(
         val deckId: String,
         val deckTitle: String,
